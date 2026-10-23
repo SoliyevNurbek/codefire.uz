@@ -1,0 +1,335 @@
+@import "tailwindcss";
+
+/* Theme is driven by next-themes setting .dark on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+/* Sidebar collapse is set on <html data-sidebar> by an inline script before paint. */
+@custom-variant collapsed (&:where([data-sidebar="collapsed"] *));
+
+/*
+ * Codefire tokens. Two tiers:
+ *   1. reference values live only in this file (raw hex),
+ *   2. semantic tokens (--bg, --fg, --accent, --verdict-*, --rank-*) are what components use.
+ * Full rationale in docs/DESIGN_SYSTEM.md. Never use raw hex in components.
+ */
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --bg: #fafafa; /* zinc-50: page */
+  --surface: #ffffff; /* cards, tables, inputs */
+  --surface-2: #f4f4f5; /* zinc-100: table header, hover, subtle fills */
+  --surface-3: #e4e4e7; /* zinc-200: pressed, skeleton */
+  --border: #e4e4e7;
+  --border-strong: #d4d4d8;
+
+  /* Text */
+  --fg: #18181b; /* zinc-900 */
+  --fg-muted: #52525b; /* zinc-600, 7.7:1 */
+  --fg-subtle: #71717a; /* zinc-500, 4.8:1 — minimum for text */
+
+  /* Accent — fire orange. Fill keeps the true brand color; text on it is dark. */
+  --accent: #f97316;
+  --accent-hover: #ea580c;
+  --accent-on: #18181b; /* 6.3:1 on --accent */
+  --accent-text: #c2410c; /* orange used as text on light: 5.2:1 */
+  --accent-soft: #fff7ed;
+  --ring: #ea580c; /* 3.6:1 vs white, passes 1.4.11 */
+
+  /* Verdicts */
+  --verdict-ac: #15803d;
+  --verdict-wa: #b91c1c;
+  --verdict-tle: #b45309;
+  --verdict-ce: #475569;
+  --verdict-pending: #52525b;
+
+  /* Rank ladder — flame temperature: ash → red → orange → yellow → blue → violet */
+  --rank-spark: #71717a;
+  --rank-ember: #991b1b;
+  --rank-flame: #c2410c;
+  --rank-blaze: #a16207;
+  --rank-inferno: #1d4ed8;
+  --rank-phoenix: #6d28d9;
+
+  --elev-sm: 0 1px 2px 0 rgb(24 24 27 / 0.05);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --bg: #09090b; /* zinc-950 */
+  --surface: #121214;
+  --surface-2: #1c1c1f;
+  --surface-3: #27272a;
+  --border: #27272a;
+  --border-strong: #3f3f46;
+
+  --fg: #fafafa;
+  --fg-muted: #a1a1aa; /* 7.8:1 */
+  --fg-subtle: #8b8b94; /* 5.6:1 on --bg */
+
+  --accent: #f97316;
+  --accent-hover: #fb923c;
+  --accent-on: #09090b;
+  --accent-text: #fb923c; /* 8.8:1 */
+  --accent-soft: #2a1608;
+  --ring: #f97316;
+
+  --verdict-ac: #4ade80;
+  --verdict-wa: #f87171;
+  --verdict-tle: #fbbf24;
+  --verdict-ce: #94a3b8;
+  --verdict-pending: #a1a1aa;
+
+  --rank-spark: #a1a1aa;
+  --rank-ember: #f87171;
+  --rank-flame: #fb923c;
+  --rank-blaze: #facc15;
+  --rank-inferno: #60a5fa;
+  --rank-phoenix: #a78bfa;
+
+  --elev-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-on: var(--accent-on);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+  --color-ring: var(--ring);
+
+  --color-verdict-ac: var(--verdict-ac);
+  --color-verdict-wa: var(--verdict-wa);
+  --color-verdict-tle: var(--verdict-tle);
+  --color-verdict-ce: var(--verdict-ce);
+  --color-verdict-pending: var(--verdict-pending);
+
+  --color-rank-spark: var(--rank-spark);
+  --color-rank-ember: var(--rank-ember);
+  --color-rank-flame: var(--rank-flame);
+  --color-rank-blaze: var(--rank-blaze);
+  --color-rank-inferno: var(--rank-inferno);
+  --color-rank-phoenix: var(--rank-phoenix);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  /* Type scale: dense app UI on a 14px base. */
+  --text-2xs: 0.6875rem; /* 11 — table meta only */
+  --text-2xs--line-height: 1rem;
+  --text-xs: 0.75rem; /* 12 */
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.8125rem; /* 13 — tables */
+  --text-sm--line-height: 1.25rem;
+  --text-base: 0.875rem; /* 14 — UI body */
+  --text-base--line-height: 1.375rem;
+  --text-md: 1rem; /* 16 — reading body (statements, blogs) */
+  --text-md--line-height: 1.625rem;
+
+  --radius-sm: 4px;
+  --radius-md: 6px; /* buttons */
+  --radius-lg: 8px; /* cards, inputs */
+
+  --shadow-sm: var(--elev-sm);
+
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Height of the sticky chrome above full-height views (top bar + optional contest banner). */
+:root {
+  --chrome: 3.5rem;
+}
+:root:has([data-contest-banner]) {
+  --chrome: 6rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    font-feature-settings: "cv11", "ss01";
+  }
+  * {
+    border-color: var(--border);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 30%, transparent);
+  }
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Overlay motion only — responds to the user opening something. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 4px);
+  }
+}
+@keyframes drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+/* Landing: tests turn green one by one, like a real judge run. */
+@keyframes test-pass {
+  from {
+    background: var(--surface-3);
+  }
+}
+.test-pass {
+  animation: test-pass 0.2s var(--ease-out) both;
+  animation-delay: calc(var(--i) * 70ms + 300ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .test-pass {
+    animation: none;
+  }
+}
+
+/* Markdown statements and blog posts. */
+.prose-cf {
+  font-size: var(--text-md);
+  line-height: var(--text-md--line-height);
+  color: var(--fg);
+}
+.prose-cf-compact {
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+}
+.prose-cf > * + * {
+  margin-top: 0.875em;
+}
+.prose-cf h2 {
+  margin-top: 1.75em;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.prose-cf h3 {
+  margin-top: 1.5em;
+  font-weight: 600;
+}
+.prose-cf a {
+  color: var(--accent-text);
+  text-underline-offset: 3px;
+}
+.prose-cf a:hover {
+  text-decoration: underline;
+}
+.prose-cf ul {
+  list-style: disc;
+  padding-left: 1.25em;
+}
+.prose-cf ol {
+  list-style: decimal;
+  padding-left: 1.25em;
+}
+.prose-cf li + li {
+  margin-top: 0.25em;
+}
+.prose-cf :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+.prose-cf table {
+  width: 100%;
+  font-size: var(--text-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+.prose-cf th,
+.prose-cf td {
+  padding: 0.4rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.prose-cf th {
+  background: var(--surface-2);
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+.prose-cf tr:last-child td {
+  border-bottom: 0;
+}
+.prose-cf .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+.prose-cf .katex {
+  font-size: 1.05em;
+}
+
+/* Shiki dual themes: light colors inline, dark via CSS variables. */
+.shiki,
+.shiki span {
+  background-color: transparent !important;
+}
+.dark .shiki,
+.dark .shiki span {
+  color: var(--shiki-dark) !important;
+}
+
+/* Line numbers for read-only code (submission source). */
+.code-lines code {
+  counter-reset: line;
+}
+.code-lines .line {
+  display: inline-block;
+  width: 100%;
+  padding-right: 1rem;
+}
+.code-lines .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 3rem;
+  padding-right: 1rem;
+  text-align: right;
+  color: var(--fg-subtle);
+  user-select: none;
+}
